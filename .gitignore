@@ -3,7 +3,7 @@
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
 
-Assets/Assets Packages/
+Assets/Graphics/
 Assets/Audio/
 Assets/Fonts/
 Assets/Music/
