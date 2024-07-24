@@ -6,6 +6,9 @@ using UnityEngine.InputSystem;
 public class Player : Entity
 {
     public bool isBusy { get; private set; }
+
+
+
     [Header("Move Info")]
     public float moveSpeed;
     public float jumpForce = 12f;
@@ -19,12 +22,12 @@ public class Player : Entity
     public float dashSpeed; 
     public float dashDuration; 
     public float dashDir {get; private set;}
-    [SerializeField] float dashCoolDown;
-    float dsahUsageTimer;
+
 
 
     [Header("Attack Detials")]
     public Vector2[] attackMovement = new Vector2[3];
+    public float counterAttackDuration = .2f;
 
 
 
@@ -42,6 +45,7 @@ public class Player : Entity
     public WallJumpState wallJumpState {get; private set;}
 
     public PlayerPrimaryAttack primaryAttack {get; private set;}
+    public PlayerCounterAttackState counterAttackState {get; private set;}
     #endregion
 
 
@@ -57,6 +61,7 @@ public class Player : Entity
         wallSlideState = new WallSlideState(this, stateMachine, "WallSlide");
         wallJumpState = new WallJumpState(this, stateMachine, "Jump");
         primaryAttack = new PlayerPrimaryAttack(this, stateMachine, "Attack");
+        counterAttackState = new PlayerCounterAttackState(this, stateMachine, "CounterAttack");
         
 
     }
@@ -91,22 +96,21 @@ public class Player : Entity
 
     private void CheckForDashInput(){
 
-        dsahUsageTimer -= Time.deltaTime;
+        // dsahUsageTimer -= Time.deltaTime;
 
         if(isWallDetected()) return;
-        if(Input.GetKeyDown(KeyCode.LeftShift) && dsahUsageTimer<0){
+        if(Input.GetKeyDown(KeyCode.LeftShift) && SkillManager.instance.dash.CanUseSkill()){
             dashDir = Input.GetAxisRaw("Horizontal");
             if(Mathf.Approximately(dashDir, 0)){
                 dashDir = facingDir;
             }
             stateMachine.ChangeState(playerDashState);
-            dsahUsageTimer = dashCoolDown;
         }
     }
-
     public void AnimationTrigger(){
         stateMachine.currentState.AnimationFinishTrigger();
     }
+
 
 
 }

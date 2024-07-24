@@ -16,6 +16,7 @@ public class PlayerPrimaryAttack : PlayerState
     public override void Enter()
     {
         base.Enter();
+        // xInput = 0;
         if(Time.time - lastTimeAttack < comboWindow){
             combatCounter %= 3;
         }else{
@@ -27,6 +28,7 @@ public class PlayerPrimaryAttack : PlayerState
 
         float attackDirection = player.facingDir;
         if(!Mathf.Approximately(xInput, 0)){
+            // Debug.Log(xInput);
             attackDirection = xInput;
         }
 

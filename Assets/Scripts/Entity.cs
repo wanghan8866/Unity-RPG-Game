@@ -9,6 +9,8 @@ public class Entity : MonoBehaviour
     protected bool facingRight = true;
 
     [Header("Collision Info")]
+    public Transform attackCheck;
+    public float attackCheckDistance;
     [SerializeField] protected Transform groundCheck;
     [SerializeField] protected float groundCheckDistance;
     [SerializeField] protected Transform wallCheck;
@@ -18,6 +20,7 @@ public class Entity : MonoBehaviour
     #region Components
     public Animator anim {get; protected set;}
     public Rigidbody2D rb {get; protected set;}
+    public EntityFX fx {get; protected set;}
 
     #endregion
 
@@ -28,9 +31,16 @@ public class Entity : MonoBehaviour
     protected virtual void Start(){
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        fx = GetComponent<EntityFX>();
     }
 
     protected virtual void Update(){
+
+    }
+
+    public virtual void Damage(){
+        fx.StartCoroutine("FlashFx");
+        Debug.Log($"{gameObject.name} was damaged!");
 
     }
 
@@ -45,6 +55,8 @@ public class Entity : MonoBehaviour
             wallCheck.position, 
             new Vector3(wallCheck.position.x + wallCheckDistance * facingDir, 
                 wallCheck.position.y));
+
+        Gizmos.DrawWireSphere(attackCheck.position, attackCheckDistance);
     
     }
 
